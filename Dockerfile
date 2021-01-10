@@ -15,13 +15,15 @@ RUN	apt update && apt install -y  \
 	php-mysql \
 	php-mbstring
 
-RUN cd /var/www/html && \
+RUN mkdir /var/www/ft-server && \
 	wget https://wordpress.org/latest.tar.gz && \
 	tar -xzvf latest.tar.gz && \
 	wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.tar.gz && \
-	tar -xzvf phpMyAdmin-latest-all-languages.tar.gz
+	tar -xzvf phpMyAdmin-latest-all-languages.tar.gz && \
+	mv wordpress /var/www/ft-server/wordpress && \
+	mv phpMyAdmin-5.0.4-all-languages /var/www/ft-server/phpMyAdmin
 
-COPY srcs/wp-config.php /var/www/html/wordpress/wp-config.php 
+COPY srcs/wp-config.php /var/www/ft-server/wordpress/wp-config.php 
 
 COPY srcs/default /etc/nginx/sites-available/default
 
