@@ -23,14 +23,27 @@ RUN mkdir /var/www/ft-server && \
 	mv wordpress /var/www/ft-server/wordpress && \
 	mv phpMyAdmin-5.0.4-all-languages /var/www/ft-server/phpMyAdmin
 
-COPY srcs/wp-config.php /var/www/ft-server/wordpress/wp-config.php 
+COPY srcs/ /
 
-COPY srcs/default /etc/nginx/sites-available/default
+RUN mv /wp-config.php /var/www/ft-server/wordpress/wp-config.php && \
+	mv /default /etc/nginx/sites-available/default && \
+	mv /ft-server /etc/nginx/sites-available/ft-server && \
+	ln -s /etc/nginx/sites-available/ft-server /etc/nginx/sites-enabled/
+
+#COPY srcs/wp-config.php /var/www/ft-server/wordpress/wp-config.php 
+
+#COPY srcs/default /etc/nginx/sites-available/default
 
 RUN service mysql start && \
 	mysql -u root --execute="CREATE DATABASE wordpress; \
 					CREATE USER 'lfrasson'@'localhost' IDENTIFIED BY 'senha'; \
 					GRANT ALL PRIVILEGES ON wordpress.* TO 'lfrasson'@'localhost';"	
+
+RUN openssl req -new -nodes -x509 \
+	-newkey rsa:2048 \
+	-keyout /etc/ssl/ft_server.key \
+	-out /etc/ssl/ft_server.crt \
+	-subj "/C=BR/ST=Sao Paulo/L=Sao Paulo"
 
 ENV AUTO_INDEX on
 
