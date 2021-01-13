@@ -30,19 +30,16 @@ RUN mv /wp-config.php /var/www/ft-server/wordpress/wp-config.php && \
 	mv /ft-server /etc/nginx/sites-available/ft-server && \
 	ln -s /etc/nginx/sites-available/ft-server /etc/nginx/sites-enabled/
 
-#COPY srcs/wp-config.php /var/www/ft-server/wordpress/wp-config.php 
-
-#COPY srcs/default /etc/nginx/sites-available/default
-
 RUN service mysql start && \
 	mysql -u root --execute="CREATE DATABASE wordpress; \
 					CREATE USER 'lfrasson'@'localhost' IDENTIFIED BY 'senha'; \
-					GRANT ALL PRIVILEGES ON wordpress.* TO 'lfrasson'@'localhost';"	
+					GRANT ALL PRIVILEGES ON wordpress.* TO 'lfrasson'@'localhost';"	&& \
+	mysql wordpress < wordpress.sql
 
 RUN openssl req -new -nodes -x509 \
 	-newkey rsa:2048 \
-	-keyout /etc/ssl/ft_server.key \
-	-out /etc/ssl/ft_server.crt \
+	-keyout /etc/ssl/ftserver.key \
+	-out /etc/ssl/ftserver.crt \
 	-subj "/C=BR/ST=Sao Paulo/L=Sao Paulo"
 
 ENV AUTO_INDEX on

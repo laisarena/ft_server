@@ -1,14 +1,23 @@
 server {
-	listen 80;
-	listen [::]:80;
+
+	listen   443 ssl;
+	listen [::]:443 ssl;
+
+	server_name www.ftserver.com ftserver.com;
 
 	root /var/www/ft-server;
 
 	index index.php index.html index.htm index.nginx-debian.html;
 
-	server_name www.ftserver.com ftserver.com;
+	ssl    on;
+	ssl_certificate    /etc/ssl/ftserver.crt;
+	ssl_certificate_key    /etc/ssl/ftserver.key;
+
+	access_log /var/log/nginx/nginx.vhost.access.log;
+	error_log /var/log/nginx/nginx.vhost.error.log;
 
 	location / {
+		root /var/www/ft-server;
 		autoindex on;
 		try_files $uri $uri/ =404;
 	}
@@ -20,19 +29,12 @@ server {
 }
 
 server {
+	listen 80;
+	listen [::]:80;
 
-	listen   443;
+	server_name www.ftserver.com ftserver.com;
 
-	ssl    on;
-	ssl_certificate    /etc/ssl/ft_server.crt;
-	ssl_certificate_key    /etc/ssl/ft_server.key;
-
-	server_name _;
-	access_log /var/log/nginx/nginx.vhost.access.log;
-	error_log /var/log/nginx/nginx.vhost.error.log;
 	location / {
-	root   /home/www/public_html/your.domain.com/public/;
-	index  index.html;
+		return 302 https://$server_name$request_uri;
 	}
-
 }
