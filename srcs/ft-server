@@ -18,3 +18,21 @@ server {
 		fastcgi_pass unix:/run/php/php7.3-fpm.sock;
 	}
 }
+
+server {
+
+	listen   443;
+
+	ssl    on;
+	ssl_certificate    /etc/ssl/ft_server.crt;
+	ssl_certificate_key    /etc/ssl/ft_server.key;
+
+	server_name _;
+	access_log /var/log/nginx/nginx.vhost.access.log;
+	error_log /var/log/nginx/nginx.vhost.error.log;
+	location / {
+	root   /home/www/public_html/your.domain.com/public/;
+	index  index.html;
+	}
+
+}
