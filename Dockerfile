@@ -4,16 +4,16 @@ WORKDIR /
 
 RUN	apt update && apt install -y  \
 	wget \
-	nginx \
-	mariadb-server \
-	php \
-	php-fpm \
-	php-opcache \
-	php-cli \
-	php-gd \
-	php-curl \
-	php-mysql \
-	php-mbstring
+	nginx=1.14.2* \
+	mariadb-server=1:10.3.27* \
+	php7.3 \
+	php7.3-fpm \
+	php7.3-opcache \
+	php7.3-cli \
+	php7.3-gd \
+	php7.3-curl \
+	php7.3-mysql \
+	php7.3-mbstring
 
 RUN mkdir /var/www/ft-server && \
 	wget https://wordpress.org/latest.tar.gz && \
